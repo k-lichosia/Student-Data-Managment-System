@@ -22,13 +22,67 @@ namespace lab9_wizualne
             InitializeComponent();
         }
 
+        private void GenerujWniosekZSzablonu()
+        {
+            if (string.IsNullOrWhiteSpace(textImie.Text) || string.IsNullOrWhiteSpace(textNazwisko.Text) || string.IsNullOrWhiteSpace(textAlbum.Text)){
+                MessageBox.Show("Aby wygenerować wniosek, musisz najpierw uzupełnić dane (lub wybrać osobę z listy)!", "Brak danych", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return; 
+            }
+
+            string sciezkaSzablonu = "wniosek.docx";
+            string nazwaGotowegoPliku = $"Wniosek_{textNazwisko.Text}_{textAlbum.Text}.docx";
+
+            try
+            {
+                // Sprawdzamy, czy plik szablonu w ogóle istnieje
+                if (!File.Exists(sciezkaSzablonu))
+                {
+                    MessageBox.Show("Nie znaleziono pliku wniosek.docx w folderze aplikacji!");
+                    return;
+                }
+
+                // Ładujemy gotowy szablon
+                using (var doc = DocX.Load(sciezkaSzablonu))
+                {
+                    // Podmieniamy znaczniki na tekst z formularza
+                    doc.ReplaceText("<<Data>>", textData.Text);
+                    doc.ReplaceText("<<NrAlbumu>>", textAlbum.Text);
+                    doc.ReplaceText("<<Nazwisko>>", textNazwisko.Text);
+                    doc.ReplaceText("<<Imie>>", textImie.Text);
+                    doc.ReplaceText("<<Semestr>>", textSemestr.Text);
+                    doc.ReplaceText("<<Rok>>", textRok.Text);
+                    doc.ReplaceText("<<Kierunek>>", textKierunek.Text);
+                    doc.ReplaceText("<<Stopien>>", textStopien.Text);
+                    doc.ReplaceText("<<Przedmiot>>", textPrzedmiot.Text);
+                    doc.ReplaceText("<<Punkty>>", textPunkty.Text);
+                    doc.ReplaceText("<<Prowadzacy>>", textProwadzacy.Text);
+                    doc.ReplaceText("<<Uzasadnienie>>", textUzasadnienie.Text);
+                    doc.ReplaceText("<<SkladKomisji1>>", textSklad1.Text);
+                    doc.ReplaceText("<<SkladKomisji2>>", textSklad2.Text);
+                    doc.ReplaceText("<<SkladKomisji3>>", textSklad3.Text);
+
+                    // Zapisujemy JAKO nowy plik (szablon pozostaje nienaruszony)
+                    doc.SaveAs(nazwaGotowegoPliku);
+                }
+
+                MessageBox.Show("Wniosek został pomyślnie wygenerowany!");
+
+                // Otwiera wygenerowany plik w Wordzie
+                Process.Start(nazwaGotowegoPliku);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Wystąpił błąd: " + ex.Message);
+            }
+        }
+
         private void Form1_Load(object sender, EventArgs e)
         {
             db.CreateTable();
             btnPokaz_Click(null, null);
         }
 
-        private void btnZapisz_Click(object sender, EventArgs e) //zapisuje dane z textboxów do bazy 
+        private void btnZapisz_Click(object sender, EventArgs e) 
         {
             string[] dane = new string[]
             {
@@ -51,9 +105,10 @@ namespace lab9_wizualne
 
             db.WriteData(dane);
             MessageBox.Show("Dane zapisane!");
+            btnPokaz_Click(null, null);
         }
 
-        private void btnPokaz_Click(object sender, EventArgs e) //wyświetla aktualne dane z bazy w listBoxie
+        private void btnPokaz_Click(object sender, EventArgs e) 
         {
             try
             {
@@ -82,7 +137,7 @@ namespace lab9_wizualne
             if (listBox1.SelectedItem == null) return;
 
             string selected = listBox1.SelectedItem.ToString();
-            int id = int.Parse(selected.Split(':')[0]); // pobieramy ID z przodu
+            int id = int.Parse(selected.Split(':')[0]); 
 
             var reader = db.ReadSingle(id);
             if (reader.Read())
@@ -106,7 +161,7 @@ namespace lab9_wizualne
             reader.Close();
         }
 
-        private void btnAktualizuj_Click(object sender, EventArgs e) //Aktualizuje zaznaczony wpis
+        private void btnAktualizuj_Click(object sender, EventArgs e) 
         {
             if (listBox1.SelectedItem == null) return;
 
@@ -132,10 +187,10 @@ namespace lab9_wizualne
 
             db.UpdateData(id, dane);
             MessageBox.Show("Zaktualizowano wpis!");
-            btnPokaz_Click(null, null); // odśwież listę
+            btnPokaz_Click(null, null); 
         }
 
-        private void btnCzysc_Click(object sender, EventArgs e) //Czyści tekst z textBoxów
+        private void btnCzysc_Click(object sender, EventArgs e) 
         {
             textData.Clear();
             textAlbum.Clear();
@@ -154,7 +209,7 @@ namespace lab9_wizualne
             textSklad3.Clear();
         }
 
-        private void btnUsun_Click(object sender, EventArgs e) //Usuwa zaznaczony wpis z bazy
+        private void btnUsun_Click(object sender, EventArgs e) 
         {
             if (listBox1.SelectedItem == null)
             {
@@ -173,6 +228,11 @@ namespace lab9_wizualne
                 btnPokaz_Click(null, null); 
                 btnCzysc_Click(null, null); 
             }
+        }
+
+        private void btnGeneruj_Click(object sender, EventArgs e)
+        {
+            GenerujWniosekZSzablonu();
         }
     }
 }

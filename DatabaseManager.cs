@@ -54,7 +54,6 @@ namespace lab9_wizualne
                 var cmd = new SQLiteCommand(query, connection);
                 string[] keys = { "Data", "NrAlbumu", "Nazwisko", "Imie", "Semestr", "Rok", "Kierunek", "Stopien", "Przedmiot", "Punkty", "Prowadzacy", "Uzasadnienie", "SkladKomisji1", "SkladKomisji2", "SkladKomisji3" };
 
-                // Logowanie danych przed zapisaniem
                 Console.WriteLine("Zapisuję dane:");
                 for (int i = 0; i < keys.Length; i++)
                 {
@@ -79,7 +78,7 @@ namespace lab9_wizualne
         {
             var connection = new SQLiteConnection(connectionString);
             connection.Open();
-            var command = new SQLiteCommand("SELECT * FROM Wnioski", connection);
+            var command = new SQLiteCommand("SELECT * FROM Wnioski ORDER BY Id DESC", connection);
 
             // Logowanie zapytania
             Console.WriteLine("Wykonano zapytanie: SELECT * FROM Wnioski");
