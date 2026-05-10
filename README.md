@@ -1,50 +1,50 @@
-# System Ewidencji Wniosków Studenckich 
+# Student Application Management System 
 
-Prosta i intuicyjna aplikacja okienkowa (Windows Forms) napisana w języku C#, służąca do zarządzania wnioskami studenckimi (np. o powołanie komisji dydaktycznej). Aplikacja pozwala na ewidencję danych w lokalnej bazie oraz automatyczne generowanie gotowych do druku dokumentów Word na podstawie szablonu.
+A simple and intuitive desktop application (Windows Forms) developed in C#, designed to manage student applications. The application enables data recording in a local database and automatic generation of print-ready Word documents based on a template.
 
-##  Główne funkcje
+##  Key Features
 
-*   **Zarządzanie danymi (CRUD):** Dodawanie, przeglądanie, aktualizowanie i usuwanie wniosków.
-*   **Lokalna baza danych:** Wykorzystanie bazy SQLite, która tworzy się i konfiguruje automatycznie przy pierwszym uruchomieniu programu (plik `komis.db`).
-*   **Generowanie dokumentów (.docx):** Automatyczne tworzenie wniosków w programie Word. Program podmienia odpowiednie znaczniki (np. `<<Imie>>`, `<<Album>>`) w pliku szablonu na dane wpisane w formularzu.
-*   **Walidacja danych:** Zabezpieczenie przed wygenerowaniem pustego lub niepełnego dokumentu.
-*   **Automatyczne odświeżanie:** Lista wniosków aktualizuje się na bieżąco po każdej akcji zapisu, edycji lub usunięcia.
+*   **Data Management (CRUD):** Add, view, update, and delete applications.
+*   **Local Database:** Uses SQLite, which automatically creates and configures itself on the first run (file: komis.db).
+*   **Document generation (.docx):** Automatic creation of Word documents. The program replaces specific placeholders (e.g., <<Imie>>, <<Album>>) in a template file with data entered into the form.
+*   **Data validation:** Protection against generating empty or incomplete documents.
+*   **Auto-refresh:** The application list updates in real-time after every save, edit, or delete action.
 
-## Technologie i narzędzia
+## Technologies and Tools
 
-*   **Język:** C#
-*   **Interfejs:** Windows Forms
-*   **Baza danych:** SQLite (`System.Data.SQLite`)
-*   **Obsługa plików Word:** DocX (starsza, darmowa wersja `1.7.1` od Xceed)
+*   **Lenguage:** C#
+*   **Interface:** Windows Forms
+*   **Databae:** SQLite (`System.Data.SQLite`)
+*   **Word File Handling:** DocX (legacy, free version `1.7.1` by Xceed)
 
-## Instrukcja instalacji i uruchomienia
+## Installation and Setup
 
-### 1. Wymagania wstępne
-*   Zainstalowane środowisko **Visual Studio** (najlepiej 2019 lub nowsze) z obsługą środowiska .NET dla aplikacji desktopowych (Windows Forms).
-*   Połączenie z internetem w celu pobrania pakietów NuGet.
+### 1. Prerequisites
+*   Visual Studio (2019 or newer recommended) with .NET desktop development (Windows Forms) support.
+*   Internet connection to download NuGet packages.
 
-### 2. Klonowanie i pakiety NuGet
-1. Pobierz projekt i otwórz plik `.sln` w Visual Studio.
-2. Kliknij prawym przyciskiem myszy na nazwę projektu w *Solution Explorer* i wybierz **Manage NuGet Packages for Solution...**.
-3. Upewnij się, że masz zainstalowane pakiety:
+### 2. Cloning and NuGet Packages
+1. Download the project and open the `.sln` file in Visual Studio.
+2. Right-click the project name in w *Solution Explorer* and select **Manage NuGet Packages for Solution...**.
+3. Ensure the following packages are installed:
    *   `System.Data.SQLite`
-   *   `DocX` (Ważne: upewnij się, że jest to wersja **1.7.1**, aby uniknąć problemów z płatną licencją).
+   *   `DocX` (Note: Ensure you are using version **1.7.1** to avoid paid license issues).
 
-### 3. Konfiguracja szablonu Word
-Aby funkcja generowania dokumentów działała poprawnie:
-1. W głównym folderze projektu `bin/Debug` musi znajdować się plik o nazwie **`wniosek.docx`** (zawierający odpowiednie znaczniki do podmiany, np. `<<Imie>>`, `<<Nazwisko>>`).
+### 3. Word Template Configuration
+For the document generation feature to work correctly:
+1. A file named **`wniosek.docx`** must be located in the project's main `bin/Debug` folder (containing the placeholders for replacement, e.g. `<<Imie>>`, `<<Nazwisko>>`).
 
-##  Jak korzystać z programu?
+##  How to use
 
-1. **Uruchom aplikację:** Baza danych `komis.db` zostanie utworzona automatycznie (jeśli nie istnieje) w folderze `bin/Debug`.
-2. **Wprowadź dane:** Wypełnij pola formularza po lewej stronie ekranu.
-3. **Zapisz:** Kliknij przycisk `Zapisz`. Zapisany wniosek natychmiast pojawi się na liście po prawej stronie.
-4. **Przeglądaj i edytuj:** Kliknij dowolny wniosek na liście. Formularz zostanie automatycznie uzupełniony jego danymi. Możesz poprawić błędy i kliknąć `Aktualizuj`.
-5. **Generuj wniosek:** Po upewnieniu się, że pola Imię, Nazwisko i Numer albumu są wypełnione, kliknij `Generuj Word`. Program stworzy nowy plik Word na podstawie szablonu i otworzy go automatycznie.
-6. **Czyszczenie formularza:** Przycisk `Wyczyść` przygotowuje puste pola do wprowadzenia nowego studenta.
+1. **Launch the App:** The `komis.db` database will be created automatically (if it doesn't exist) in the `bin/Debug` folder.
+2. **Enter Data:** Fill in the form fields on the left side of the screen.
+3. **Save:** Click the `Zapisz`(Save) button. The application will immediately appear in the list on the right.
+4. **View and edit:** Click any entry in the list. The form will automatically populate with that record's data. You can correct errors and click `Aktualizuj` (Update).
+5. **Generate Document:** Once all the fields are filled, click `Generuj Word`. The program will create a new Word file based on the template and open it automatically.
+6. **Clean Form:** `Wyczyść` (Clear) button resets the fields to prepare for a new entry.
 
-##  Struktura projektu
+##  Project Structure
 
-*   `Form1.cs` - Warstwa wizualna (UI), obsługa zdarzeń i logika wprowadzania danych, generowanie pliku Word.
-*   `DatabaseManager.cs` - Warstwa obsługi bazy danych (zapytania SQL, połączenie z SQLite).
-*   `wniosek.docx` - Szablon uczelniany z tagami do podmiany.
+*   `Form1.cs` - UI Layer, event handling, data entry logic, and Word document generation.
+*   `DatabaseManager.cs` - Database access layer (SQL queries, SQLite connection).
+*   `wniosek.docx` - University template with tags for data replacement.
